@@ -411,6 +411,170 @@ function WiiUI:Window()
 			return Settings
 		end
 		
+		function TabSettings:Bind(Title, Options)
+
+			local Settings = {
+				Type = "Keybind",
+				Name = Title,
+				Value = Options.Default or 'None',
+				Callback = Options.Callback or function() end
+			}
+
+			WiiUI.Flags[Title] = Settings
+
+			local Keybind = createInstance("Frame", {
+				Name = "Keybind",
+				Position = UDim2.new(0.000, 0.000, 0.309, 0.000),
+				Size = UDim2.new(0.000, 319.000, 0.000, 26.000),
+				Parent = Canvas,
+				BackgroundTransparency = 1,
+				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				BorderSizePixel = 0,
+				ZIndex = 1
+			})
+
+			local BindTitle = createInstance("TextLabel", {
+				Name = "BindTitle",
+				Position = UDim2.new(0.000, 1.000, 0.500, 0.000),
+				Size = UDim2.new(0.000, 0.000, 0.000, 17.000),
+				Parent = Keybind,
+				BackgroundTransparency = 1,
+				AnchorPoint = Vector2.new(0, 0.5),
+				FontFace = WiiUI.Fonts.SemiBold,
+				Text = Title,
+				AutomaticSize = Enum.AutomaticSize.X,
+				TextXAlignment = Enum.TextXAlignment.Left,
+				TextYAlignment = Enum.TextYAlignment.Center,
+				TextColor3 = Color3.fromRGB(255, 255, 255),
+				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				TextSize = 17,
+				BorderSizePixel = 0,
+				ZIndex = 1
+			})
+
+			local KeyBox = createInstance("Frame", {
+				Name = "KeyBox",
+				Position = UDim2.new(1.000, 0.000, 0.500, 0.000),
+				Size = UDim2.new(0.000, 1.000, 0.000, 23.000),
+				Parent = Keybind,
+				BackgroundTransparency = 0.5,
+				AnchorPoint = Vector2.new(1, 0.5),
+				AutomaticSize = Enum.AutomaticSize.X,
+				BackgroundColor3 = Color3.fromRGB(89, 83, 255),
+				BorderSizePixel = 0,
+				ZIndex = 1
+			})
+
+			local BoxCorner = createInstance("UICorner", {
+				Parent = KeyBox,
+				CornerRadius = UDim.new(0, 4)
+			})
+
+			local BoxStroke = createInstance("UIStroke", {
+				Parent = KeyBox,
+				Color = Color3.fromRGB(89, 83, 255),
+				Thickness = 1,
+				LineJoinMode = Enum.LineJoinMode.Round,
+				Transparency = 0
+			})
+
+			local StrokeGrad = createInstance("UIGradient", {
+				Parent = BoxStroke,
+				Rotation = -125,
+				Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+					ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)),
+				}),
+				Transparency = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 0),
+					NumberSequenceKeypoint.new(1, 1)
+				}),
+				Offset = Vector2.new(1, 1)
+			})
+
+			local SelectedBind = createInstance("TextLabel", {
+				Name = "SelectedBind",
+				Position = UDim2.new(0.000, 0.000, 0.500, 0.000),
+				Size = UDim2.new(0.000, 1.000, 1.000, 0.000),
+				Parent = KeyBox,
+				BackgroundTransparency = 1,
+				AnchorPoint = Vector2.new(0, 0.5),
+				FontFace = WiiUI.Fonts.SemiBold,
+				Text = Settings.Value,
+				AutomaticSize = Enum.AutomaticSize.X,
+				TextXAlignment = Enum.TextXAlignment.Center,
+				TextYAlignment = Enum.TextYAlignment.Center,
+				TextColor3 = Color3.fromRGB(215, 215, 215),
+				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				TextSize = 15,
+				BorderSizePixel = 0,
+				ZIndex = 1
+			})
+
+			createInstance("UIPadding", {
+				Parent = KeyBox,
+				PaddingLeft = UDim.new(0, 6),
+				PaddingRight = UDim.new(0, 6)
+			})
+
+			createInstance("UIPadding", {
+				Parent = Keybind,
+				PaddingLeft = UDim.new(0, 1)
+			})
+
+			local TouchArea = createInstance("ImageButton", {
+				Name = "TouchArea",
+				Position = UDim2.new(0.503, 0.000, 0.000, 0.000),
+				Size = UDim2.new(0.000, 158.000, 0.000, 26.000),
+				Parent = Keybind,
+				BackgroundTransparency = 1,
+				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				ImageColor3 = Color3.fromRGB(255, 255, 255),
+				BorderSizePixel = 0,
+				ZIndex = 1
+			})
+
+			local Listening = false
+			function Settings:Set(Value: string)
+				Listening = false
+				Settings.Value = Value
+				SelectedBind.Text = Value
+				Spring.target(StrokeGrad, 1, 3, {
+					Offset = Vector2.new(1, 1)
+				})
+			end
+
+			TouchArea.MouseButton1Down:Connect(function()
+				Listening = true
+				Spring.target(StrokeGrad, 1, 3, {
+					Offset = Vector2.new(-1, -1)
+				})
+			end)
+
+			UserInputService.InputBegan:Connect(function(input, gpe)
+				if gpe then return end
+
+				local Type = input.UserInputType
+				if Type == Enum.UserInputType.Keyboard then
+					local Key = tostring(input.KeyCode)
+					Key = Key:gsub("Enum.KeyCode.", "")
+
+					if Listening then
+						Settings:Set(Key)
+					elseif Key == Settings.Value then
+						Settings.Callback(Key)
+					end
+				elseif Type == Enum.UserInputType.MouseButton1 or Type == Enum.UserInputType.MouseButton2 or Type == Enum.UserInputType.MouseButton3 then
+					Type = tostring(Type):gsub("Enum.UserInputType", "")
+					if Listening then
+						Settings:Set(Type)
+					elseif Type == Settings.Value then
+						Settings.Callback(Type)
+					end
+				end
+			end)
+		end
+
 		function TabSettings:Slider(Title, Options)
 			
 			local Settings = {
