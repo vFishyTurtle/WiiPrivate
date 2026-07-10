@@ -24,6 +24,13 @@ local Players		   = game:GetService("Players")
 local Spring = RunService:IsStudio() and require(workspace.spr) or loadstring(game:HttpGet("https://raw.githubusercontent.com/vFishyTurtle/WiiPrivate/refs/heads/main/spr"))()
 local Player = Players.LocalPlayer
 
+if Wii_Inputs then
+	for _, v in Wii_Inputs do
+		v:Disconnect()
+	end
+end
+getgenv().Wii_Inputs = {}
+
 -- // Make Folders \\ --
 
 if not isfolder("WiiV2") then
@@ -53,39 +60,39 @@ local function Drag(UI)
 	local InputPos
 	local UIPos
 	
-	UI.InputBegan:Connect(function(input)
+	table.insert(Wii_Inputs, UI.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			InputPos = input.Position
 			UIPos = UI.Position
 		end
-	end)
+	end))
 	
-	UI.InputEnded:Connect(function(input)
+	table.insert(Wii_Inputs, UI.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			InputPos = nil
 			UIPos = nil
 		end
-	end)
+	end))
 	
-	UserInputService.InputChanged:Connect(function(input)
+	table.insert(Wii_Inputs, UserInputService.InputChanged:Connect(function(input)
 		if InputPos and input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 			local Delta = input.Position - InputPos
 			Spring.target(UI, 1, 7, {
 				Position = UDim2.new(UIPos.X.Scale, UIPos.X.Offset + Delta.X, UIPos.Y.Scale, UIPos.Y.Offset + Delta.Y)
 			})
 		end
-	end)
+	end))
 	
 end
 
 local ScreenGui = Instance.new("ScreenGui", RunService:IsStudio() and Player.PlayerGui or gethui())
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
-UserInputService.InputBegan:Connect(function(input, gpe)
+table.insert(Wii_Inputs, UserInputService.InputBegan:Connect(function(input, gpe)
 	if input.KeyCode == Enum.KeyCode.LeftControl and not gpe then
 		ScreenGui.Enabled = not ScreenGui.Enabled
 	end
-end)
+end))
 local Locked = true
 
 function WiiUI:Unlock(val)
@@ -269,14 +276,14 @@ function WiiUI:Window()
 			TabSettings.Enabled = Enabled
 		end
 		
-		Tab.MouseButton1Down:Connect(function()
+		table.insert(Wii_Inputs, Tab.MouseButton1Down:Connect(function()
 			for _, v in WiiUI.Tabs do
 				if v.Enabled then
 					v:Set(false)
 				end
 			end
 			TabSettings:Set(true)
-		end)
+		end))
 		
 		if #WiiUI.Tabs == 2 then
 			TabSettings:Set(true)
@@ -402,9 +409,9 @@ function WiiUI:Window()
 				Settings.Value = Value
 			end
 			
-			Toggle.MouseButton1Down:Connect(function()
+			table.insert(Wii_Inputs, Toggle.MouseButton1Down:Connect(function()
 				Settings:Set(not Settings.Value)
-			end)
+			end))
 			
 			Settings:Set(Settings.Value)
 			
@@ -544,14 +551,14 @@ function WiiUI:Window()
 				})
 			end
 
-			TouchArea.MouseButton1Down:Connect(function()
+			table.insert(Wii_Inputs, TouchArea.MouseButton1Down:Connect(function()
 				Listening = true
 				Spring.target(StrokeGrad, 1, 3, {
 					Offset = Vector2.new(-1, -1)
 				})
-			end)
+			end))
 
-			UserInputService.InputBegan:Connect(function(input, gpe)
+			table.insert(Wii_Inputs, UserInputService.InputBegan:Connect(function(input, gpe)
 				if gpe then return end
 
 				local Type = input.UserInputType
@@ -576,7 +583,7 @@ function WiiUI:Window()
 						Settings.Callback(Type)
 					end
 				end
-			end)
+			end))
 		end
 
 		function TabSettings:Slider(Title, Options)
@@ -725,14 +732,14 @@ function WiiUI:Window()
 				Slider.Visible = Value
 			end
 			
-			SliderVal.FocusLost:Connect(function()
+			table.insert(Wii_Inputs, SliderVal.FocusLost:Connect(function()
 				local toNum; pcall(function() toNum = tonumber(SliderVal.Text) end)
 				if toNum then
 					Settings:Set(math.clamp(SliderVal.Text, Settings.Min, Settings.Max))
 				else
 					SliderVal.Text = tostring(Settings.Value)
 				end
-			end)
+			end))
 
 			local PercentVal = Settings.Value
 
@@ -751,14 +758,14 @@ function WiiUI:Window()
 			end
 
 			local Connection;
-			UserInputService.InputEnded:Connect(function(input)
+			table.insert(Wii_Inputs, UserInputService.InputEnded:Connect(function(input)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 					if(Connection) then
 						Connection:Disconnect();
 						Connection = nil;
 					end;
 				end;
-			end)
+			end))
 
 			function Settings:Set(Value)
 				if math.abs(Settings.Min) ~= Settings.Min then
@@ -794,7 +801,7 @@ function WiiUI:Window()
 
 			Settings:Set(Settings.Value)
 
-			Slider.MouseButton1Down:Connect(function()
+			table.insert(Wii_Inputs, Slider.MouseButton1Down:Connect(function()
 				if(Connection) then
 					Connection:Disconnect();
 				end;
@@ -810,7 +817,7 @@ function WiiUI:Window()
 
 					Settings:Set(Settings.Value)
 				end)
-			end)
+			end))
 			return Settings
 		end
 		
@@ -1012,7 +1019,7 @@ function WiiUI:Window()
 
 					local CanHover = true
 
-					Option.MouseButton1Down:Connect(function()
+					table.insert(Wii_Inputs, Option.MouseButton1Down:Connect(function()
 						CanHover = false
 						Option.BackgroundTransparency = 0.5
 						Settings.Callback(v)
@@ -1024,17 +1031,17 @@ function WiiUI:Window()
 							OptionHolder.Visible = false
 						end)
 						Tween:Play()
-					end)
+					end))
 
-					Option.MouseEnter:Connect(function()
+					table.insert(Wii_Inputs, Option.MouseEnter:Connect(function()
 						if not CanHover then return end
 						Option.BackgroundTransparency = 0.5
-					end)
+					end))
 
-					Option.MouseLeave:Connect(function()
+					table.insert(Wii_Inputs, Option.MouseLeave:Connect(function()
 						if not CanHover then return end
 						Option.BackgroundTransparency = 1
-					end)
+					end))
 
 					TweenService:Create(OptionHolder, TweenInfo.new(0.15), {Size = UDim2.fromOffset(265, 78)}):Play()
 				end
@@ -1048,14 +1055,14 @@ function WiiUI:Window()
 			
 			Settings.Callback(Settings.Value)
 			
-			Dropdown.MouseButton1Down:Connect(function()
+			table.insert(Wii_Inputs, Dropdown.MouseButton1Down:Connect(function()
 				if Opened then
 					TweenService:Create(OptionHolder, TweenInfo.new(0.15), {Size = UDim2.fromOffset(265, 0)}):Play()
 				else
 					Settings:Open()
 				end
 				Opened = not Opened
-			end)
+			end))
 
 			return Settings
 		end
@@ -1178,9 +1185,9 @@ function WiiUI:Window()
 				PaddingLeft = UDim.new(0, 1)
 			})
 			
-			ValueText.FocusLost:Connect(function()
+			table.insert(Wii_Inputs, ValueText.FocusLost:Connect(function()
 				Settings.Callback(ValueText.Text)
-			end)
+			end))
 
 			return Settings
 		end
@@ -1254,7 +1261,7 @@ function WiiUI:Window()
 					ZIndex = 1
 				})
 				
-				Button.MouseButton1Down:Connect(function()
+				table.insert(Wii_Inputs, Button.MouseButton1Down:Connect(function()
 					ButtonSettings.Callback()
 					Spring.stop(Button); Spring.stop(ButtonTitle)
 					Spring.target(Button, 1, 3, {
@@ -1263,9 +1270,9 @@ function WiiUI:Window()
 					Spring.target(ButtonTitle, 1, 3, {
 						TextColor3 = Color3.fromRGB(255, 255, 255)
 					})
-				end)
+				end))
 				
-				Button.MouseButton1Up:Connect(function()
+				table.insert(Wii_Inputs, Button.MouseButton1Up:Connect(function()
 					Spring.stop(Button); Spring.stop(ButtonTitle)
 					Spring.target(Button, 1, 3, {
 						BackgroundTransparency = .5
@@ -1273,7 +1280,7 @@ function WiiUI:Window()
 					Spring.target(ButtonTitle, 1, 3, {
 						TextColor3 = Color3.fromRGB(215, 215, 215)
 					})
-				end)
+				end))
 				
 				return ButtonSettings
 			end
