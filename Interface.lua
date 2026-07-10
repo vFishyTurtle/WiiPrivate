@@ -560,6 +560,10 @@ function WiiUI:Window()
 					Key = Key:gsub("Enum.KeyCode.", "")
 
 					if Listening then
+						if Key == "Backspace" then
+							Settings:Set("None")
+							return
+						end
 						Settings:Set(Key)
 					elseif Key == Settings.Value then
 						Settings.Callback(Key)
