@@ -139,7 +139,7 @@ function WiiUI:Window()
 		Parent = Main,
 		BackgroundTransparency = 1,
 		FontFace = WiiUI.Fonts.Bold,
-		Text = 'WiiHub v2',
+		Text = 'WiiHub v2 Private',
 		TextXAlignment = Enum.TextXAlignment.Left,
 		TextYAlignment = Enum.TextYAlignment.Center,
 		TextColor3 = Color3.fromRGB(255, 255, 255),
@@ -562,7 +562,7 @@ function WiiUI:Window()
 				if gpe then return end
 
 				local Type = input.UserInputType
-				if Type == Enum.UserInputType.Keyboard then
+				if Type == Enum.UserInputType.Keyboard or Type == Enum.UserInputType.Gamepad1 then
 					local Key = tostring(input.KeyCode)
 					Key = Key:gsub("Enum.KeyCode.", "")
 
