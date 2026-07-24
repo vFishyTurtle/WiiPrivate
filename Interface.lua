@@ -197,7 +197,7 @@ function WiiUI:Window()
 		BackgroundTransparency = 1,
 		ScrollBarThickness = 3,
 		AutomaticCanvasSize = Enum.AutomaticSize.Y,
-		CanvasSize = UDim2.fromScale(1, 0),
+		CanvasSize = UDim2.new(0, 0, 1, 0),
 		ClipsDescendants = true,
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		ScrollBarImageColor3 = Color3.fromRGB(89, 83, 255),
@@ -1519,3 +1519,140 @@ function WiiUI:Window()
 end
 
 return WiiUI
+
+-- WiiUI:Unlock("kjsdkljnsdfkljng830812380245l.msdnhfg019735ksdg815")
+-- local WiiV2 = WiiUI:Window()
+
+-- local Settings = WiiV2:Tab("Settings", 1)
+
+-- function WiiUI:CreateConfig(Name)
+-- 	local SavedSettings = {}
+-- 	for _, v in WiiUI.Flags do
+-- 		table.insert(SavedSettings, {
+-- 			["Name"] = v.Name,
+-- 			["Value"] = v.Value,
+-- 			["Type"] = v.Type
+-- 		})
+-- 	end
+
+-- 	local Data = HttpService:JSONEncode(SavedSettings)
+-- 	Name = Name:gsub(".json", "")
+-- 	writefile("WiiV2//Configs//"..Name..".json", Data)
+-- end
+
+-- function WiiUI:LoadConfig(Data)
+-- 	for _, Table in Data do
+
+-- 		local Element = WiiUI.Flags[Table.Name]
+
+-- 		if Element then
+-- 			Element:Set(Table.Value)
+-- 		end
+-- 	end
+-- end
+
+-- -- // Settings Tab \\ --
+
+-- local SelectedConfig
+
+-- Settings:Dropdown("Select Config", {
+-- 	List = function()
+-- 		return listfiles("WiiV2//Configs")
+-- 	end,
+-- 	Callback = function(v)
+-- 		SelectedConfig = v
+-- 	end
+-- })
+
+-- local ButtonList = Settings:ButtonList()
+
+-- ButtonList:Button("Set Startup", {
+-- 	Callback = function()
+-- 		if not SelectedConfig then
+-- 			return
+-- 		end
+-- 		writefile("WiiV2//AutoConfig.txt", SelectedConfig)
+-- 	end
+-- })
+
+-- ButtonList:Button("Remove Startup", {
+-- 	Callback = function()
+-- 		writefile("WiiV2//AutoConfig.txt", "")
+-- 	end
+-- })
+
+-- local ButtonList = Settings:ButtonList()
+-- ButtonList:Button("Load Config", {
+-- 	Callback = function()
+-- 		if not SelectedConfig then
+-- 			return
+-- 		end
+
+-- 		local Data = readfile(SelectedConfig)
+-- 		Data = HttpService:JSONDecode(Data)
+-- 		WiiUI:LoadConfig(Data)
+-- 	end
+-- })
+
+-- Settings:Divider()
+
+-- local ConfigName = ""
+-- Settings:Textbox("Create Config", {
+-- 	Callback = function(v)
+-- 		ConfigName = v
+-- 	end
+-- })
+
+-- local ButtonList = Settings:ButtonList()
+-- ButtonList:Button("Save Config", {
+-- 	Callback = function()
+-- 		if ConfigName == "" then
+-- 			return
+-- 		end
+-- 		WiiUI:CreateConfig(ConfigName)
+-- 	end
+-- })
+
+-- -- // Tabs \\ --
+
+-- local Catching = WiiV2:Tab("Catching")
+-- local Aimbot = WiiV2:Tab("Aimbot")
+
+-- Catching:Toggle("Magnets", {
+-- 	Enabled = false,
+-- 	Callback = function(v)
+-- 		print(v)
+-- 	end,
+-- })
+
+-- Catching:Slider("Magnet Range", {
+-- 	Min  = 0,
+-- 	Max  = 20,
+-- 	Step = .1,
+-- 	Callback = function(v)
+-- 		-- print(v)
+-- 	end,
+-- })
+
+-- Catching:Divider()
+
+-- Catching:Dropdown("Hitbox Shape", {
+-- 	Value = "Sphere",
+-- 	List = {"Sphere", "Box"},
+-- 	Callback = function(v)
+-- 		print(v)
+-- 	end,
+
+-- })
+
+-- -- // Auto Config \\ --
+
+-- if isfile("WiiV2//AutoConfig.txt") then
+-- 	local Config = readfile("WiiV2//AutoConfig.txt")
+-- 	if isfile(Config) then
+-- 		local Data = HttpService:JSONDecode(readfile(Config))
+-- 		WiiUI:LoadConfig(Data)
+-- 	else
+-- 		writefile("WiiV2//AutoConfig.txt", "")
+-- 	end
+-- end
