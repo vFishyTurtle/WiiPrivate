@@ -104,7 +104,9 @@ function WiiUI:Unlock(val)
 end
 
 function WiiUI:Window()
-	local Window = {}
+	local Window = {
+		MessageCallback = function() end
+	}
 	
 	if Locked then
 		return
@@ -305,6 +307,11 @@ function WiiUI:Window()
 		BorderSizePixel = 0,
 		ZIndex = 1
 	})
+
+	table.insert(Wii_Inputs, TextBox.FocusLost:Connect(function()
+		Window.MessageCallback(TextBox.Text)
+		TextBox.Text = ""
+	end))
 
 	createInstance("UICorner", {
 		Parent = MessageBox,
