@@ -343,7 +343,7 @@ function WiiUI:Window()
 		ShareGame.Visible 	= Enabled
 	end))
 
-	function Window:SendMessage(Name, Message)
+	function Window:SendMessage(Color, Name, Message)
 		local Message = createInstance("TextLabel", {
 			Name = "Message",
 			Position = UDim2.new(0.000, 0.000, 0.000, 0.000),
@@ -351,7 +351,7 @@ function WiiUI:Window()
 			Parent = ChatFrame,
 			BackgroundTransparency = 1,
 			FontFace = WiiUI.Fonts.ChatSemiBold,
-			Text = '<font color="#888888">[12:10] </font><font color="#1cbfff">'..Name..': </font>'..Message,
+			Text = '<font color="#888888">[12:10] </font><font color="'..Color..'">'..Name..': </font>'..Message,
 			AutomaticSize = Enum.AutomaticSize.XY,
 			TextXAlignment = Enum.TextXAlignment.Left,
 			TextYAlignment = Enum.TextYAlignment.Center,
