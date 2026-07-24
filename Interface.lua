@@ -7,7 +7,9 @@ local WiiUI = {
 		Bold	 = Font.new("rbxassetid://12187365364", Enum.FontWeight.Bold, Enum.FontStyle.Normal),
 		Medium	 = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium, Enum.FontStyle.Normal),
 		Regular  = Font.new("rbxassetid://12187365364", Enum.FontWeight.Regular, Enum.FontStyle.Normal),
-		SemiBold = Font.new("rbxassetid://12187365364", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+		SemiBold = Font.new("rbxassetid://12187365364", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal),
+
+		ChatSemiBold = Font.new("rbxassetid://12187364147", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 	}
 }
 
@@ -184,7 +186,184 @@ function WiiUI:Window()
 		VerticalAlignment = Enum.VerticalAlignment.Center,
 		SortOrder = Enum.SortOrder.LayoutOrder
 	})
+
+	local ChatFrame = createInstance("ScrollingFrame", {
+		Name = "ChatFrame",
+		Position = UDim2.new(0.000, 13.000, 0.000, 61.000),
+		Size = UDim2.new(1.000, -13.000, 0.947, -100.000),
+		Parent = Main,
+		BackgroundTransparency = 1,
+		ScrollBarThickness = 3,
+		AutomaticCanvasSize = Enum.AutomaticSize.Y,
+		ClipsDescendants = true,
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		ScrollBarImageColor3 = Color3.fromRGB(89, 83, 255),
+		BorderSizePixel = 0,
+		Visible = false,
+		ZIndex = 1
+	})
+
+	local ShareConfig = createInstance("Frame", {
+		Name = "ShareConfig",
+		Position = UDim2.new(0.912, 0.000, 0.888, 0.000),
+		Size = UDim2.new(0.000, 46.000, 0.000, 46.000),
+		Parent = Main,
+		BackgroundTransparency = 0.75,
+		BackgroundColor3 = Color3.fromRGB(89, 83, 255),
+		BorderSizePixel = 0,
+		Visible = false,
+		ZIndex = 1
+	})
+
+	createInstance("UICorner", {
+		Parent = ShareConfig,
+		CornerRadius = UDim.new(0, 4)
+	})
+
+	createInstance("ImageLabel", {
+		Name = "ImageLabel",
+		Position = UDim2.new(0.500, 0.000, 0.500, 0.000),
+		Size = UDim2.new(0.000, 24.000, 0.000, 24.000),
+		Parent = ShareConfig,
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		ImageColor3 = Color3.fromRGB(167, 167, 167),
+		Image = "rbxassetid://116470107903795",
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	local ShareGame = createInstance("Frame", {
+		Name = "ShareGame",
+		Position = UDim2.new(0.829, 0.000, 0.888, 0.000),
+		Size = UDim2.new(0.000, 46.000, 0.000, 46.000),
+		Parent = Main,
+		BackgroundTransparency = 0.75,
+		BackgroundColor3 = Color3.fromRGB(89, 83, 255),
+		BorderSizePixel = 0,
+		Visible = false,
+		ZIndex = 1
+	})
+
+	createInstance("UICorner", {
+		Parent = ShareGame,
+		CornerRadius = UDim.new(0, 4)
+	})
+
+	createInstance("ImageLabel", {
+		Name = "ImageLabel",
+		Position = UDim2.new(0.500, 0.000, 0.500, 0.000),
+		Size = UDim2.new(0.000, 24.000, 0.000, 24.000),
+		Parent = ShareGame,
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		ImageColor3 = Color3.fromRGB(167, 167, 167),
+		Image = "rbxassetid://107493864593789",
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	createInstance("UIListLayout", {
+		Parent = ChatFrame,
+		Padding = UDim.new(0, 5),
+		FillDirection = Enum.FillDirection.Vertical,
+		HorizontalAlignment = Enum.HorizontalAlignment.Left,
+		VerticalAlignment = Enum.VerticalAlignment.Top,
+		SortOrder = Enum.SortOrder.LayoutOrder
+	})
+
+	local MessageBox = createInstance("Frame", {
+		Name = "MessageBox",
+		Position = UDim2.new(0.019, 0.000, 0.888, 0.000),
+		Size = UDim2.new(0.000, 540.000, 0.000, 46.000),
+		Parent = Main,
+		BackgroundTransparency = 0.75,
+		BackgroundColor3 = Color3.fromRGB(89, 83, 255),
+		BorderSizePixel = 0,
+		Visible = false,
+		ZIndex = 1
+	})
+
+	local TextBox = createInstance("TextBox", {
+		Name = "MessageBox",
+		Position = UDim2.new(0.027, 0.000, 0.000, 0.000),
+		Size = UDim2.new(0.000, 513.000, 0.000, 46.000),
+		Parent = MessageBox,
+		BackgroundTransparency = 1,
+		FontFace = WiiUI.Fonts.ChatSemiBold,
+		Text = '',
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Center,
+		TextWrapped = true,
+		TextColor3 = Color3.fromRGB(189, 189, 189),
+		PlaceholderText = 'Enter Message...',
+		PlaceholderColor3 = Color3.fromRGB(189, 189, 189),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 19,
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	createInstance("UICorner", {
+		Parent = MessageBox,
+		CornerRadius = UDim.new(0, 4)
+	})
+
+	local ChatButton = createInstance("ImageButton", {
+		Name = "ImageButton",
+		Position = UDim2.new(0.944, 0, 0.024, 0),
+		Size = UDim2.new(0, 25, 0, 25),
+		Parent = Main,
+		BackgroundTransparency = 1,
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		ImageColor3 = Color3.fromRGB(255, 255, 255),
+		Image = "rbxassetid://84094955728925",
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
 	
+	local SavedTab;
+	table.insert(Wii_Inputs, ChatButton.MouseButton1Down:Connect(function()
+		local Enabled = not ChatFrame.Visible
+		for _, v in WiiUI.Tabs do
+			if not v.Enabled then
+				continue
+			end
+			SavedTab = v
+		end
+
+		
+		SavedTab:Set(not Enabled)
+		TabHolder.Visible 	= not Enabled
+		MessageBox.Visible  = Enabled
+		ChatFrame.Visible 	= Enabled
+		ShareConfig.Visible = Enabled
+		ShareGame.Visible 	= Enabled
+	end))
+
+	function Window:SendMessage(Name, Message)
+		local Message = createInstance("TextLabel", {
+			Name = "Message",
+			Position = UDim2.new(0.000, 0.000, 0.000, 0.000),
+			Size = UDim2.new(0.000, 0.000, 0.000, 0.000),
+			Parent = ChatFrame,
+			BackgroundTransparency = 1,
+			FontFace = WiiUI.Fonts.ChatSemiBold,
+			Text = '<font color="#888888">[12:10] </font><font color="#1cbfff">'..Name..': </font>'..Message,
+			AutomaticSize = Enum.AutomaticSize.XY,
+			TextXAlignment = Enum.TextXAlignment.Left,
+			TextYAlignment = Enum.TextYAlignment.Center,
+			RichText = true,
+			TextColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			TextSize = 21,
+			BorderSizePixel = 0,
+			ZIndex = 1
+		})
+	end
+
 	function Window:Tab(Title, Index)
 		
 		local TabSettings = {
