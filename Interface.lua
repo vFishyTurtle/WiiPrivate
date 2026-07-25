@@ -145,7 +145,7 @@ function WiiUI:Window()
 		Parent = Main,
 		BackgroundTransparency = 1,
 		FontFace = WiiUI.Fonts.Bold,
-		Text = 'WiiHub v2 Private',
+		Text = 'WiiHub v2 | gg/z77pW6McUm',
 		TextXAlignment = Enum.TextXAlignment.Left,
 		TextYAlignment = Enum.TextYAlignment.Center,
 		TextColor3 = Color3.fromRGB(255, 255, 255),
