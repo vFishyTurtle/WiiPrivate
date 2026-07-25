@@ -579,7 +579,7 @@ function WiiUI:Window()
 				Option.BackgroundTransparency = 0.5
 				ValueText.Text = v
 				Selected = v
-				local Tween = TweenService:Create(OptionHolder, TweenInfo.new(0.15), {Size = UDim2.fromOffset(265, 0)})
+				local Tween = TweenService:Create(OptionHolder, TweenInfo.new(0.15), {Size = UDim2.fromOffset(240, 0)})
 				Tween.Completed:Connect(function()
 					Opened = false
 					OptionHolder.Visible = false
@@ -758,6 +758,7 @@ function WiiUI:Window()
 			end
 
 			Downloaded = true
+			ImageLabel.Visible = false
 			DownloadText.Text = "Downloaded!"
 			Window.ConfigDownload(ID)
 		end))
