@@ -105,7 +105,9 @@ end
 
 function WiiUI:Window()
 	local Window = {
-		MessageCallback = function() end
+		MessageCallback = function() end,
+		ConfigDownload  = function() end,
+		ConfigShared 	= function() end
 	}
 	
 	if Locked then
@@ -197,7 +199,7 @@ function WiiUI:Window()
 		BackgroundTransparency = 1,
 		ScrollBarThickness = 3,
 		AutomaticCanvasSize = Enum.AutomaticSize.Y,
-		CanvasSize = UDim2.new(0, 0, 1, 0),
+		CanvasSize = UDim2.new(0, 0, .1, 0),
 		ClipsDescendants = true,
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		ScrollBarImageColor3 = Color3.fromRGB(89, 83, 255),
@@ -206,7 +208,7 @@ function WiiUI:Window()
 		ZIndex = 1
 	})
 
-	local ShareConfig = createInstance("Frame", {
+	local ShareConfig = createInstance("ImageButton", {
 		Name = "ShareConfig",
 		Position = UDim2.new(0.912, 0.000, 0.888, 0.000),
 		Size = UDim2.new(0.000, 46.000, 0.000, 46.000),
@@ -215,6 +217,7 @@ function WiiUI:Window()
 		BackgroundColor3 = Color3.fromRGB(89, 83, 255),
 		BorderSizePixel = 0,
 		Visible = false,
+		AutoButtonColor = false,
 		ZIndex = 1
 	})
 
@@ -332,6 +335,295 @@ function WiiUI:Window()
 		ZIndex = 1
 	})
 	
+	local ShareMenu = createInstance("Frame", {
+		Name = "ShareMenu",
+		Position = UDim2.new(0.500, 0, 0.500, 0),
+		Size = UDim2.new(1, 0, 1, 0),
+		Parent = Main,
+		BackgroundTransparency = 0.30000001192092896,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+		BorderSizePixel = 0,
+		Visible = false,
+		ZIndex = 1
+	})
+
+	local ShareFrame = createInstance("Frame", {
+		Name = "ShareFrame",
+		Position = UDim2.new(0.500, 0, 0.500, 0),
+		Size = UDim2.new(0, 270, 0, 168),
+		Parent = ShareMenu,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		BackgroundColor3 = Color3.fromRGB(26, 26, 39),
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	local UICorner = createInstance("UICorner", {
+		Parent = ShareFrame,
+		CornerRadius = UDim.new(0, 4)
+	})
+
+	local ShareButton = createInstance("ImageButton", {
+		Name = "ShareButton",
+		Position = UDim2.new(0.528, 0, 0.722, 0),
+		Size = UDim2.new(0, 112, 0, 38),
+		Parent = ShareFrame,
+		BackgroundTransparency = 0.75,
+		BackgroundColor3 = Color3.fromRGB(89, 83, 255),
+		BorderSizePixel = 0,
+		AutoButtonColor = false,
+		ZIndex = 1
+	})
+
+	local UICorner_1 = createInstance("UICorner", {
+		Parent = ShareButton,
+		CornerRadius = UDim.new(0, 4)
+	})
+
+	local ShareText = createInstance("TextLabel", {
+		Name = "ShareText",
+		Position = UDim2.new(0.500, 0, 0.500, 0),
+		Size = UDim2.new(0, 0, 0, 0),
+		Parent = ShareButton,
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		FontFace = WiiUI.Fonts.ChatSemiBold,
+		Text = 'Share',
+		AutomaticSize = Enum.AutomaticSize.XY,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Center,
+		RichText = true,
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 21,
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	local ShareTitle = createInstance("TextLabel", {
+		Name = "ShareTitle",
+		Position = UDim2.new(0.058, 0, 0.062, 0),
+		Size = UDim2.new(0.556, 0, 0.157, 0),
+		Parent = ShareFrame,
+		BackgroundTransparency = 1,
+		FontFace = WiiUI.Fonts.ChatSemiBold,
+		Text = 'Select a config to share',
+		AutomaticSize = Enum.AutomaticSize.XY,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Center,
+		RichText = true,
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 21,
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	local OptionHolder = createInstance("ScrollingFrame", {
+		Name = "OptionHolder",
+		Position = UDim2.fromScale(0.056, 0.536),
+		Size = UDim2.new(0, 240, 0, 86),
+		Parent = ShareFrame,
+		BackgroundTransparency = 0,
+		Visible = false,
+		ScrollBarThickness = 0,
+		ClipsDescendants = true,
+		BackgroundColor3 = Color3.fromRGB(15, 14, 44),
+		BorderSizePixel = 0,
+		ZIndex = 2
+	})
+
+	local OptionLayout = createInstance("UIListLayout", {
+		Parent = OptionHolder,
+		FillDirection = Enum.FillDirection.Vertical,
+		HorizontalAlignment = Enum.HorizontalAlignment.Left,
+		VerticalAlignment = Enum.VerticalAlignment.Top,
+		SortOrder = Enum.SortOrder.LayoutOrder
+	})
+
+	local DropdownBG = createInstance("ImageButton", {
+		Name = "DropdownBG",
+		Position = UDim2.new(0.052, 0, 0.346, 0),
+		Size = UDim2.new(0, 240, 0, 23),
+		Parent = ShareFrame,
+		BackgroundTransparency = 0.6499999761581421,
+		BackgroundColor3 = Color3.fromRGB(89, 83, 255),
+		BorderSizePixel = 0,
+		AutoButtonColor = false,
+		ZIndex = 1
+	})
+
+	local Arrow = createInstance("ImageLabel", {
+		Name = "Arrow",
+		Position = UDim2.new(1, 0, 0, 0),
+		Size = UDim2.new(0, 23, 0, 23),
+		Parent = DropdownBG,
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(1, 0),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		ImageColor3 = Color3.fromRGB(255, 255, 255),
+		Image = "rbxassetid://6034818372",
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	local ValueText = createInstance("TextLabel", {
+		Name = "ValueText",
+		Position = UDim2.new(0, 10, 0.500, 0),
+		Size = UDim2.new(0, 0, 0, 17),
+		Parent = DropdownBG,
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(0, 0.5),
+		FontFace = WiiUI.Fonts.SemiBold,
+		Text = 'None',
+		AutomaticSize = Enum.AutomaticSize.X,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Center,
+		TextColor3 = Color3.fromRGB(215, 215, 215),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 15,
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	local Cancel = createInstance("ImageButton", {
+		Name = "Cancel",
+		Position = UDim2.new(0.058, 0, 0.722, 0),
+		Size = UDim2.new(0, 112, 0, 38),
+		Parent = ShareFrame,
+		BackgroundTransparency = 0.75,
+		AutoButtonColor = false,
+		BackgroundColor3 = Color3.fromRGB(255, 112, 112),
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	local UICorner_4 = createInstance("UICorner", {
+		Parent = Cancel,
+		CornerRadius = UDim.new(0, 4)
+	})
+
+	local CancelText = createInstance("TextLabel", {
+		Name = "CancelText",
+		Position = UDim2.new(0.500, 0, 0.500, 0),
+		Size = UDim2.new(0, 0, 0, 0),
+		Parent = Cancel,
+		BackgroundTransparency = 1,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		FontFace = WiiUI.Fonts.ChatSemiBold,
+		Text = 'Cancel',
+		AutomaticSize = Enum.AutomaticSize.XY,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Center,
+		RichText = true,
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = 21,
+		BorderSizePixel = 0,
+		ZIndex = 1
+	})
+
+	table.insert(Wii_Inputs, ShareConfig.MouseButton1Down:Connect(function()
+		ShareMenu.Visible = not ShareMenu.Visible
+	end))
+
+	local Opened = false
+	local Selected = "None"
+	function Open()
+		OptionHolder.Visible = true
+		
+		for _, v in OptionHolder:GetChildren() do
+			if v:IsA("UIListLayout") then
+				continue
+			end
+			v:Destroy()	
+		end
+
+		local List = listfiles("WiiV2//Configs")
+
+		for i, v in List do
+			local Option = createInstance("ImageButton", {
+				Name = "Option",
+				Position = UDim2.new(0, 0, 0, 0),
+				Size = UDim2.new(1, 0, 0, 22),
+				Parent = OptionHolder,
+				BackgroundTransparency = 1,
+				BackgroundColor3 = Color3.fromRGB(74, 69, 213),
+				BorderSizePixel = 0,
+				AutoButtonColor = false,
+				ZIndex = 6
+			})
+			local OptionText = createInstance("TextLabel", {
+				Name = "OptionText",
+				Position = UDim2.new(0.004, 10, 0.500, 0),
+				Size = UDim2.new(0, 254, 0, 17),
+				Parent = Option,
+				BackgroundTransparency = 1,
+				AnchorPoint = Vector2.new(0, 0.5),
+				FontFace = WiiUI.Fonts.SemiBold,
+				Text = v,
+				AutomaticSize = Enum.AutomaticSize.X,
+				TextXAlignment = Enum.TextXAlignment.Left,
+				TextYAlignment = Enum.TextYAlignment.Center,
+				TextColor3 = Color3.fromRGB(215, 215, 215),
+				BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+				TextSize = 15,
+				BorderSizePixel = 0,
+				ZIndex = 7
+			})
+			local CanHover = true
+
+			table.insert(Wii_Inputs, Option.MouseButton1Down:Connect(function()
+				CanHover = false
+				Option.BackgroundTransparency = 0.5
+				ValueText.Text = v
+				Selected = v
+				local Tween = TweenService:Create(OptionHolder, TweenInfo.new(0.15), {Size = UDim2.fromOffset(265, 0)})
+				Tween.Completed:Connect(function()
+					Opened = false
+					OptionHolder.Visible = false
+				end)
+				Tween:Play()
+			end))
+
+			table.insert(Wii_Inputs, Option.MouseEnter:Connect(function()
+				if not CanHover then return end
+				Option.BackgroundTransparency = 0.5
+			end))
+
+			table.insert(Wii_Inputs, Option.MouseLeave:Connect(function()
+				if not CanHover then return end
+				Option.BackgroundTransparency = 1
+			end))
+
+			TweenService:Create(OptionHolder, TweenInfo.new(0.15), {Size = UDim2.fromOffset(240, 78)}):Play()
+		end
+	end
+	table.insert(Wii_Inputs, DropdownBG.MouseButton1Down:Connect(function()
+		if Opened then
+			TweenService:Create(OptionHolder, TweenInfo.new(0.15), {Size = UDim2.fromOffset(240, 0)}):Play()
+		else
+			Open()
+		end
+		Opened = not Opened
+	end))
+	table.insert(Wii_Inputs, Cancel.MouseButton1Down:Connect(function()
+		if Opened then
+			TweenService:Create(OptionHolder, TweenInfo.new(0.15), {Size = UDim2.fromOffset(240, 0)}):Play()
+			Opened = false
+		end
+		ShareMenu.Visible = false
+	end))
+	table.insert(Wii_Inputs, ShareButton.MouseButton1Down:Connect(function()
+		if Selected == "None" then
+			return
+		end
+
+		ShareMenu.Visible = false
+		Window.ConfigShared(Selected)
+	end))
+
 	local SavedTab;
 	table.insert(Wii_Inputs, ChatButton.MouseButton1Down:Connect(function()
 		local Enabled = not ChatFrame.Visible
@@ -351,7 +643,7 @@ function WiiUI:Window()
 		ShareGame.Visible 	= Enabled
 	end))
 
-	function Window:SendMessage(Color, Name, Message, TimeStamp)
+	function Window:SendMessage(Color: string, Name: string, Message:string, TimeStamp: number): ()
 		local DT = DateTime.fromUnixTimestampMillis(TimeStamp)
 		local Message = createInstance("TextLabel", {
 			Name = "Message",
@@ -372,6 +664,103 @@ function WiiUI:Window()
 			BorderSizePixel = 0,
 			ZIndex = 1
 		})
+	end
+
+	function Window:SendConfig(ID: string, Name: string)
+		local ConfigBox = createInstance("Frame", {
+			Name = "ConfigBox",
+			Position = UDim2.new(0, 0, 0.198, 0),
+			Size = UDim2.new(0, 270, 0, 88),
+			Parent = ChatFrame,
+			BackgroundColor3 = Color3.fromRGB(26, 26, 39),
+			BorderSizePixel = 0,
+			ZIndex = 1
+		})
+
+		local UICorner = createInstance("UICorner", {
+			Parent = ConfigBox,
+			CornerRadius = UDim.new(0, 4)
+		})
+
+		local Title = createInstance("TextLabel", {
+			Name = "Title",
+			Position = UDim2.new(0.058, 0, 0.121, 0),
+			Size = UDim2.new(0.459, 0, 0.227, 0),
+			Parent = ConfigBox,
+			BackgroundTransparency = 1,
+			FontFace = WiiUI.Fonts.ChatSemiBold,
+			Text = Name,
+			AutomaticSize = Enum.AutomaticSize.XY,
+			TextXAlignment = Enum.TextXAlignment.Left,
+			TextYAlignment = Enum.TextYAlignment.Center,
+			RichText = true,
+			TextColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			TextSize = 19,
+			BorderSizePixel = 0,
+			ZIndex = 1
+		})
+
+		local Box = createInstance("ImageButton", {
+			Name = "Box",
+			Position = UDim2.new(0.040, 0, 0.454, 0),
+			Size = UDim2.new(0, 247, 0, 38),
+			Parent = ConfigBox,
+			BackgroundTransparency = 0.75,
+			BackgroundColor3 = Color3.fromRGB(89, 83, 255),
+			BorderSizePixel = 0,
+			AutoButtonColor = false,
+			ZIndex = 1
+		})
+
+		local UICorner_1 = createInstance("UICorner", {
+			Parent = Box,
+			CornerRadius = UDim.new(0, 4)
+		})
+
+		local ImageLabel = createInstance("ImageLabel", {
+			Name = "ImageLabel",
+			Position = UDim2.new(0.223, 0, 0.211, 0),
+			Size = UDim2.new(0, 21, 0, 21),
+			Parent = Box,
+			BackgroundTransparency = 1,
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			ImageColor3 = Color3.fromRGB(89, 83, 255),
+			Image = "rbxassetid://115173801889820",
+			BorderSizePixel = 0,
+			ZIndex = 1
+		})
+
+		local DownloadText = createInstance("TextLabel", {
+			Name = "DownloadText",
+			Position = UDim2.new(0.500, 0, 0.500, 0),
+			Size = UDim2.new(0, 0, 0, 0),
+			Parent = Box,
+			BackgroundTransparency = 1,
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			FontFace = WiiUI.Fonts.ChatSemiBold,
+			Text = 'Download',
+			AutomaticSize = Enum.AutomaticSize.XY,
+			TextXAlignment = Enum.TextXAlignment.Left,
+			TextYAlignment = Enum.TextYAlignment.Center,
+			RichText = true,
+			TextColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			TextSize = 21,
+			BorderSizePixel = 0,
+			ZIndex = 1
+		})
+
+		local Downloaded = false
+		table.insert(Wii_Inputs, Box.MouseButton1Down:Connect(function()
+			if Downloaded then
+				return
+			end
+
+			Downloaded = true
+			DownloadText.Text = "Downloaded!"
+			Window.ConfigDownload(ID)
+		end))
 	end
 
 	function Window:Tab(Title, Index)
@@ -1519,140 +1908,3 @@ function WiiUI:Window()
 end
 
 return WiiUI
-
--- WiiUI:Unlock("kjsdkljnsdfkljng830812380245l.msdnhfg019735ksdg815")
--- local WiiV2 = WiiUI:Window()
-
--- local Settings = WiiV2:Tab("Settings", 1)
-
--- function WiiUI:CreateConfig(Name)
--- 	local SavedSettings = {}
--- 	for _, v in WiiUI.Flags do
--- 		table.insert(SavedSettings, {
--- 			["Name"] = v.Name,
--- 			["Value"] = v.Value,
--- 			["Type"] = v.Type
--- 		})
--- 	end
-
--- 	local Data = HttpService:JSONEncode(SavedSettings)
--- 	Name = Name:gsub(".json", "")
--- 	writefile("WiiV2//Configs//"..Name..".json", Data)
--- end
-
--- function WiiUI:LoadConfig(Data)
--- 	for _, Table in Data do
-
--- 		local Element = WiiUI.Flags[Table.Name]
-
--- 		if Element then
--- 			Element:Set(Table.Value)
--- 		end
--- 	end
--- end
-
--- -- // Settings Tab \\ --
-
--- local SelectedConfig
-
--- Settings:Dropdown("Select Config", {
--- 	List = function()
--- 		return listfiles("WiiV2//Configs")
--- 	end,
--- 	Callback = function(v)
--- 		SelectedConfig = v
--- 	end
--- })
-
--- local ButtonList = Settings:ButtonList()
-
--- ButtonList:Button("Set Startup", {
--- 	Callback = function()
--- 		if not SelectedConfig then
--- 			return
--- 		end
--- 		writefile("WiiV2//AutoConfig.txt", SelectedConfig)
--- 	end
--- })
-
--- ButtonList:Button("Remove Startup", {
--- 	Callback = function()
--- 		writefile("WiiV2//AutoConfig.txt", "")
--- 	end
--- })
-
--- local ButtonList = Settings:ButtonList()
--- ButtonList:Button("Load Config", {
--- 	Callback = function()
--- 		if not SelectedConfig then
--- 			return
--- 		end
-
--- 		local Data = readfile(SelectedConfig)
--- 		Data = HttpService:JSONDecode(Data)
--- 		WiiUI:LoadConfig(Data)
--- 	end
--- })
-
--- Settings:Divider()
-
--- local ConfigName = ""
--- Settings:Textbox("Create Config", {
--- 	Callback = function(v)
--- 		ConfigName = v
--- 	end
--- })
-
--- local ButtonList = Settings:ButtonList()
--- ButtonList:Button("Save Config", {
--- 	Callback = function()
--- 		if ConfigName == "" then
--- 			return
--- 		end
--- 		WiiUI:CreateConfig(ConfigName)
--- 	end
--- })
-
--- -- // Tabs \\ --
-
--- local Catching = WiiV2:Tab("Catching")
--- local Aimbot = WiiV2:Tab("Aimbot")
-
--- Catching:Toggle("Magnets", {
--- 	Enabled = false,
--- 	Callback = function(v)
--- 		print(v)
--- 	end,
--- })
-
--- Catching:Slider("Magnet Range", {
--- 	Min  = 0,
--- 	Max  = 20,
--- 	Step = .1,
--- 	Callback = function(v)
--- 		-- print(v)
--- 	end,
--- })
-
--- Catching:Divider()
-
--- Catching:Dropdown("Hitbox Shape", {
--- 	Value = "Sphere",
--- 	List = {"Sphere", "Box"},
--- 	Callback = function(v)
--- 		print(v)
--- 	end,
-
--- })
-
--- -- // Auto Config \\ --
-
--- if isfile("WiiV2//AutoConfig.txt") then
--- 	local Config = readfile("WiiV2//AutoConfig.txt")
--- 	if isfile(Config) then
--- 		local Data = HttpService:JSONDecode(readfile(Config))
--- 		WiiUI:LoadConfig(Data)
--- 	else
--- 		writefile("WiiV2//AutoConfig.txt", "")
--- 	end
--- end
