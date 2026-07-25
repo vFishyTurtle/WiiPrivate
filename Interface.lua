@@ -664,6 +664,8 @@ function WiiUI:Window()
 			BorderSizePixel = 0,
 			ZIndex = 1
 		})
+		task.wait() 
+    	ChatFrame.CanvasPosition = Vector2.new(0, ChatFrame.AbsoluteCanvasSize.Y)
 	end
 
 	function Window:SendConfig(ID: string, Name: string)
