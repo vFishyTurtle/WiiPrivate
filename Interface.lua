@@ -90,13 +90,7 @@ end
 local ScreenGui = Instance.new("ScreenGui", RunService:IsStudio() and Player.PlayerGui or gethui())
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
-table.insert(Wii_Inputs, UserInputService.InputBegan:Connect(function(input, gpe)
-	if input.KeyCode == Enum.KeyCode.LeftControl and not gpe then
-		ScreenGui.Enabled = not ScreenGui.Enabled
-	end
-end))
 local Locked = true
-
 function WiiUI:Unlock(val)
 	if val == "kjsdkljnsdfkljng830812380245l.msdnhfg019735ksdg815" then
 		Locked = false
@@ -107,7 +101,9 @@ function WiiUI:Window()
 	local Window = {
 		MessageCallback = function() end,
 		ConfigDownload  = function() end,
-		ConfigShared 	= function() end
+		ConfigShared 	= function() end,
+
+		ToggleKey = "LeftControl"
 	}
 	
 	if Locked then
@@ -119,6 +115,12 @@ function WiiUI:Window()
 		getgenv().WiiLib = nil
 	end
 	
+	table.insert(Wii_Inputs, UserInputService.InputBegan:Connect(function(input, gpe)
+		if input.KeyCode == Enum.KeyCode[Window.ToggleKey] and not gpe then
+			ScreenGui.Enabled = not ScreenGui.Enabled
+		end
+	end))
+
 	local Main = createInstance("Frame", {
 		Name = "Main",
 		Position = UDim2.new(0.329, 0, 0.236, 0),
